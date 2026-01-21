@@ -1,3 +1,13 @@
+## Project Overview
+
+This project displays a patient's medication history as a timeline, based on records from multiple facilities.
+
+- **Backend:** Django + Django REST Framework (GET `/api/medications/`)
+- **Frontend:** React + TypeScript + Material UI Timeline
+- **Mock data:** Seeded via JSON fixture (`backend/medications/fixtures/medications.json`)
+- **UI cues:** Flags medication **overlaps**, **gaps**, and **switches** (dose / facility changes)
+
+
 ## Local Development
 
 ### Backend (Django)

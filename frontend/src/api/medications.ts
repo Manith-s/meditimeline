@@ -8,7 +8,7 @@ export type Medication = {
     facility: string;
   };
   
-  const API_BASE = "http://127.0.0.1:8000/api";
+  const API_BASE = process.env.REACT_APP_API_BASE ?? "http://127.0.0.1:8000/api";
   
   export async function fetchMedications(): Promise<Medication[]> {
     const res = await fetch(`${API_BASE}/medications/`);
