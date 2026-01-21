@@ -1,0 +1,63 @@
+[
+    {
+      "model": "medications.medication",
+      "pk": 1,
+      "fields": {
+        "name": "Lisinopril",
+        "dose": "10 mg",
+        "route": "oral",
+        "start_date": "2023-01-10",
+        "end_date": "2023-05-15",
+        "facility": "City Hospital"
+      }
+    },
+    {
+      "model": "medications.medication",
+      "pk": 2,
+      "fields": {
+        "name": "Lisinopril",
+        "dose": "20 mg",
+        "route": "oral",
+        "start_date": "2023-05-15",
+        "end_date": "2023-12-31",
+        "facility": "City Hospital"
+      }
+    },
+    {
+      "model": "medications.medication",
+      "pk": 3,
+      "fields": {
+        "name": "Metformin",
+        "dose": "500 mg",
+        "route": "oral",
+        "start_date": "2022-11-01",
+        "end_date": null,
+        "facility": "General Clinic"
+      }
+    },
+    {
+      "model": "medications.medication",
+      "pk": 4,
+      "fields": {
+        "name": "Metformin",
+        "dose": "500 mg",
+        "route": "oral",
+        "start_date": "2023-02-01",
+        "end_date": null,
+        "facility": "County Hospital"
+      }
+    },
+    {
+      "model": "medications.medication",
+      "pk": 5,
+      "fields": {
+        "name": "Insulin",
+        "dose": "10 units",
+        "route": "subcutaneous",
+        "start_date": "2023-06-01",
+        "end_date": "2023-07-15",
+        "facility": "County Hospital"
+      }
+    }
+  ]
+  
