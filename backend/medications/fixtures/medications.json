@@ -1,75 +1,122 @@
 [
-    {
-      "model": "medications.medication",
-      "pk": 1,
-      "fields": {
-        "name": "Lisinopril",
-        "dose": "10 mg",
-        "route": "oral",
-        "start_date": "2023-01-10",
-        "end_date": "2023-05-15",
-        "facility": "City Hospital"
-      }
-    },
-    {
-      "model": "medications.medication",
-      "pk": 2,
-      "fields": {
-        "name": "Lisinopril",
-        "dose": "20 mg",
-        "route": "oral",
-        "start_date": "2023-05-15",
-        "end_date": "2023-12-31",
-        "facility": "City Hospital"
-      }
-    },
-    {
-      "model": "medications.medication",
-      "pk": 3,
-      "fields": {
-        "name": "Metformin",
-        "dose": "500 mg",
-        "route": "oral",
-        "start_date": "2022-11-01",
-        "end_date": null,
-        "facility": "General Clinic"
-      }
-    },
-    {
-      "model": "medications.medication",
-      "pk": 4,
-      "fields": {
-        "name": "Metformin",
-        "dose": "500 mg",
-        "route": "oral",
-        "start_date": "2023-02-01",
-        "end_date": null,
-        "facility": "County Hospital"
-      }
-    },
-    {
-      "model": "medications.medication",
-      "pk": 5,
-      "fields": {
-        "name": "Insulin",
-        "dose": "10 units",
-        "route": "subcutaneous",
-        "start_date": "2023-06-01",
-        "end_date": "2023-07-15",
-        "facility": "County Hospital"
-      }
-    },
-    {
-      "model": "medications.medication",
-      "pk": 6,
-      "fields": {
-        "name": "Insulin",
-        "dose": "12 units",
-        "route": "subcutaneous",
-        "start_date": "2023-08-01",
-        "end_date": "2023-09-01",
-        "facility": "County Hospital"
-      }
+  {
+    "model": "medications.medication",
+    "pk": 1,
+    "fields": {
+      "name": "Metformin",
+      "dose": "500 mg",
+      "route": "oral",
+      "start_date": "2023-06-15",
+      "end_date": null,
+      "facility": "General Clinic"
     }
-  ]
-  
+  },
+  {
+    "model": "medications.medication",
+    "pk": 2,
+    "fields": {
+      "name": "Lisinopril",
+      "dose": "5 mg",
+      "route": "oral",
+      "start_date": "2024-01-10",
+      "end_date": "2024-03-15",
+      "facility": "City Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 3,
+    "fields": {
+      "name": "Lisinopril",
+      "dose": "10 mg",
+      "route": "oral",
+      "start_date": "2024-03-15",
+      "end_date": "2025-05-15",
+      "facility": "City Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 4,
+    "fields": {
+      "name": "Metformin",
+      "dose": "500 mg",
+      "route": "oral",
+      "start_date": "2024-11-01",
+      "end_date": null,
+      "facility": "County Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 5,
+    "fields": {
+      "name": "Lisinopril",
+      "dose": "20 mg",
+      "route": "oral",
+      "start_date": "2025-05-15",
+      "end_date": "2025-12-31",
+      "facility": "City Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 6,
+    "fields": {
+      "name": "Insulin Glargine",
+      "dose": "10 units",
+      "route": "subcutaneous",
+      "start_date": "2025-06-01",
+      "end_date": "2025-07-15",
+      "facility": "County Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 7,
+    "fields": {
+      "name": "Metformin",
+      "dose": "1000 mg",
+      "route": "oral",
+      "start_date": "2025-09-01",
+      "end_date": null,
+      "facility": "General Clinic"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 8,
+    "fields": {
+      "name": "Lisinopril",
+      "dose": "20 mg",
+      "route": "oral",
+      "start_date": "2026-01-01",
+      "end_date": null,
+      "facility": "County Hospital"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 9,
+    "fields": {
+      "name": "Lisinopril",
+      "dose": "20 mg",
+      "route": "IV",
+      "start_date": "2025-11-15",
+      "end_date": "2025-11-20",
+      "facility": "Emergency Department"
+    }
+  },
+  {
+    "model": "medications.medication",
+    "pk": 10,
+    "fields": {
+      "name": "Prednisone",
+      "dose": "40 mg",
+      "route": "oral",
+      "start_date": "2025-12-10",
+      "end_date": "2026-01-10",
+      "facility": "City Hospital"
+    }
+  }
+]

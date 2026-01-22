@@ -158,7 +158,7 @@ function relationWithPrev(prev: Medication | null, curr: Medication): Relation {
     const prevEnd = prev.end_date;
     // Gap exists if prev ends BEFORE curr starts (strictly earlier)
     if (toUtcMs(prevEnd) < currStartMs) {
-      gapDays = daysBetween(prevEnd, curr.start_date);
+      gapDays = Math.max(0, daysBetween(prevEnd, curr.start_date) - 1);
     }
   }
 
