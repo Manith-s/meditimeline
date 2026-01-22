@@ -19,9 +19,17 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 
+/**
+ * Parse ISO date string to UTC milliseconds.
+ * Returns 0 for invalid dates (defensive).
+ */
 function toUtcMs(dateIso: string): number {
-  // Avoid local timezone shifting the date
-  return Date.parse(`${dateIso}T00:00:00Z`);
+  const ms = Date.parse(`${dateIso}T00:00:00Z`);
+  if (Number.isNaN(ms)) {
+    console.warn(`Invalid date string: ${dateIso}`);
+    return 0;
+  }
+  return ms;
 }
 
 function daysBetween(startIso: string, endIso: string): number {
@@ -33,11 +41,19 @@ function formatRange(start: string, end: string | null) {
   return `${start} → ${end ?? "ongoing"}`;
 }
 
+/** Returns true if the medication has a valid date range (end >= start, or no end). */
+function isValidDateRange(med: Medication): boolean {
+  if (!med.end_date) return true; // Ongoing is valid
+  return toUtcMs(med.end_date) >= toUtcMs(med.start_date);
+}
+
 type Relation = {
   overlap: boolean;
   gapDays: number; // 0 if no gap
   doseChanged: boolean;
   facilityChanged: boolean;
+  routeChanged: boolean;
+  isConflict: boolean; // overlap + sameName + any field difference
 };
 
 function relationWithPrev(prev: Medication | null, curr: Medication): Relation {
@@ -47,6 +63,8 @@ function relationWithPrev(prev: Medication | null, curr: Medication): Relation {
       gapDays: 0,
       doseChanged: false,
       facilityChanged: false,
+      routeChanged: false,
+      isConflict: false,
     };
   }
 
@@ -71,8 +89,21 @@ function relationWithPrev(prev: Medication | null, curr: Medication): Relation {
   const sameName = prev.name === curr.name;
   const doseChanged = sameName && prev.dose !== curr.dose;
   const facilityChanged = sameName && prev.facility !== curr.facility;
+  const routeChanged = sameName && prev.route !== curr.route;
 
-  return { overlap, gapDays, doseChanged, facilityChanged };
+  // Conflict: overlapping dates with same medication but contradictory data
+  // This indicates records from different sources that need reconciliation
+  const isConflict =
+    overlap && sameName && (doseChanged || facilityChanged || routeChanged);
+
+  return {
+    overlap,
+    gapDays,
+    doseChanged,
+    facilityChanged,
+    routeChanged,
+    isConflict,
+  };
 }
 
 function App() {
@@ -99,10 +130,22 @@ function App() {
     };
   }, []);
 
-  const sorted = useMemo(() => {
-    return [...data].sort(
+  // Sort medications and precompute previous medication lookup (O(n) instead of O(n²))
+  const { sorted, prevByMedId } = useMemo(() => {
+    const sortedList = [...data].sort(
       (a, b) => a.start_date.localeCompare(b.start_date) || a.id - b.id
     );
+
+    // Build lookup map: for each medication, store its previous same-name medication
+    const prevMap = new Map<number, Medication | null>();
+    const lastByName = new Map<string, Medication>();
+
+    for (const med of sortedList) {
+      prevMap.set(med.id, lastByName.get(med.name) ?? null);
+      lastByName.set(med.name, med);
+    }
+
+    return { sorted: sortedList, prevByMedId: prevMap };
   }, [data]);
 
   return (
@@ -120,18 +163,21 @@ function App() {
 
       {error && <Alert severity="error">Error: {error}</Alert>}
 
-      {!loading && !error && (
+      {!loading && !error && sorted.length === 0 && (
+        <Paper variant="outlined" style={{ padding: 24, textAlign: "center" }}>
+          <Typography variant="body1" color="text.secondary">
+            No medications found.
+          </Typography>
+        </Paper>
+      )}
+
+      {!loading && !error && sorted.length > 0 && (
         <Paper variant="outlined" style={{ padding: 16 }}>
           <Timeline position="right">
             {sorted.map((m, idx) => {
-              const prev =
-                idx === 0
-                  ? null
-                  : [...sorted.slice(0, idx)]
-                      .reverse()
-                      .find((x) => x.name === m.name) ?? null;
-
+              const prev = prevByMedId.get(m.id) ?? null;
               const rel = relationWithPrev(prev, m);
+              const validRange = isValidDateRange(m);
 
               return (
                 <TimelineItem key={m.id}>
@@ -155,9 +201,28 @@ function App() {
                     <Stack
                       direction="row"
                       spacing={1}
-                      style={{ marginTop: 8, flexWrap: "wrap" }}
+                      style={{ marginTop: 8, flexWrap: "wrap", gap: 4 }}
                     >
-                      {prev && rel.overlap && (
+                      {/* Invalid date range warning */}
+                      {!validRange && (
+                        <Chip
+                          label="INVALID DATE RANGE"
+                          color="error"
+                          size="small"
+                        />
+                      )}
+
+                      {/* CONFLICT: overlapping + contradictory data */}
+                      {prev && rel.isConflict && (
+                        <Chip
+                          label="CONFLICT"
+                          color="error"
+                          size="small"
+                        />
+                      )}
+
+                      {/* Show overlap only when no conflict (conflicts already indicate overlap) */}
+                      {prev && !rel.isConflict && rel.overlap && (
                         <Chip
                           label="OVERLAP with previous"
                           color="warning"
@@ -171,6 +236,7 @@ function App() {
                           size="small"
                         />
                       )}
+                      {/* Show specific changes (even during conflicts to explain what changed) */}
                       {prev && rel.doseChanged && (
                         <Chip label="DOSE CHANGE" color="secondary" size="small" />
                       )}
@@ -181,13 +247,20 @@ function App() {
                           size="small"
                         />
                       )}
+                      {prev && rel.routeChanged && (
+                        <Chip
+                          label="ROUTE CHANGE"
+                          color="secondary"
+                          size="small"
+                        />
+                      )}
                     </Stack>
 
                     {/* Medication details */}
                     <Stack
                       direction="row"
                       spacing={1}
-                      style={{ marginTop: 10, flexWrap: "wrap" }}
+                      style={{ marginTop: 10, flexWrap: "wrap", gap: 4 }}
                     >
                       <Chip label={`Dose: ${m.dose}`} size="small" />
                       <Chip label={`Route: ${m.route}`} size="small" />
