@@ -7,6 +7,15 @@ This project displays a patient's medication history as a timeline, based on rec
 - **Mock data:** Seeded via JSON fixture (`backend/medications/fixtures/medications.json`)
 - **UI cues:** Flags medication **overlaps**, **gaps**, and **switches** (dose / facility changes)
 
+## Live Demo
+
+- **Frontend (Vercel):** https://meditimeline.vercel.app
+- **Backend API (Render):** https://meditimeline.onrender.com/api/medications/
+
+> Note: The backend root (`/`) may return **404** on Render — that’s expected. Use the API endpoint above.
+
+
+
 
 ## Local Development
 
